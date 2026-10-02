@@ -1,5 +1,3 @@
-// Pure logic: no React, no UI. Easy to unit test and reuse (home loan, car loan, etc.).
-
 export type EmiInput = { principal: number; annualRate: number; tenureMonths: number };
 
 export type ScheduleRow = { month: number; emi: number; principal: number; interest: number; balance: number };

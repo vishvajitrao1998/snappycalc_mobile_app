@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
 import { Card, Hero, Screen, StatRow } from '@/core/components/Card';
 import { DateInput } from '@/core/components/DateInput';
 import { DateParts, toUtcDate, todayParts } from '@/core/date';
 import { LOCALE } from '@/core/format';
 import { Colors } from '@/core/theme';
 import { useStyles } from '@/core/ThemeProvider';
+import { useMemo, useState } from 'react';
+import { Pressable, StyleSheet, Text } from 'react-native';
 import { calculateAge } from './engine';
 
 const makeStyles = (c: Colors) =>
