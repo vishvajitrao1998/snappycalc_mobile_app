@@ -14,21 +14,26 @@ export type AgeResult = {
   bornOnWeekday: string;
 };
 
+function addMonthsClamped(d: Date, n: number) {
+  const target = d.getUTCMonth() + n;
+  const y = d.getUTCFullYear() + Math.floor(target / 12);
+  const m = ((target % 12) + 12) % 12;
+  const last = new Date(Date.UTC(y, m + 1, 0)).getUTCDate();
+  return new Date(Date.UTC(y, m, Math.min(d.getUTCDate(), last)));
+}
+
 /** Both dates are UTC midnight (see core/date.ts). Returns null if asOf is before dob. */
 export function calculateAge(dob: Date, asOf: Date): AgeResult | null {
   if (asOf < dob) return null;
 
-  let years = asOf.getUTCFullYear() - dob.getUTCFullYear();
-  let months = asOf.getUTCMonth() - dob.getUTCMonth();
-  let days = asOf.getUTCDate() - dob.getUTCDate();
-  if (days < 0) {
-    months--;
-    days += new Date(Date.UTC(asOf.getUTCFullYear(), asOf.getUTCMonth(), 0)).getUTCDate();
+  // Month-end safe: count whole months from dob, then the leftover days.
+  let totalMonths = (asOf.getUTCFullYear() - dob.getUTCFullYear()) * 12 + (asOf.getUTCMonth() - dob.getUTCMonth());
+  let anchor = addMonthsClamped(dob, totalMonths);
+  if (anchor > asOf) {
+    totalMonths--;
+    anchor = addMonthsClamped(dob, totalMonths);
   }
-  if (months < 0) {
-    years--;
-    months += 12;
-  }
+  const days = Math.round((asOf.getTime() - anchor.getTime()) / DAY);
 
   const totalDays = Math.floor((asOf.getTime() - dob.getTime()) / DAY);
   // Feb 29 birthdays roll to Mar 1 in non-leap years (Date.UTC overflow).
@@ -36,10 +41,10 @@ export function calculateAge(dob: Date, asOf: Date): AgeResult | null {
   if (next < asOf) next = new Date(Date.UTC(asOf.getUTCFullYear() + 1, dob.getUTCMonth(), dob.getUTCDate()));
 
   return {
-    years,
-    months,
+    years: Math.floor(totalMonths / 12),
+    months: totalMonths % 12,
     days,
-    totalMonths: years * 12 + months,
+    totalMonths,
     totalWeeks: Math.floor(totalDays / 7),
     totalDays,
     totalHours: totalDays * 24,

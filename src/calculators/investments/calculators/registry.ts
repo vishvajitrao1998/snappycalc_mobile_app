@@ -1,6 +1,5 @@
 import type { CalculatorCategory, CalculatorDefinition } from './types';
 import { ageCalculator } from './age';
-import { currencyConverter } from './currency';
 import { emiCalculator } from './emi';
 import { goldLoanCalculator } from './gold-loan';
 import {
@@ -8,20 +7,10 @@ import {
   retirementCalculator, sipCalculator, sipGoalCalculator, stepUpSipCalculator, swpCalculator,
 } from './investments';
 import { bikeLoanCalculator, carLoanCalculator, personalLoanCalculator } from './loans';
-import { rentVsBuyCalculator } from './rent-vs-buy';
-import {
-  capitalGainsCalculator, gratuityCalculator, gstCalculator, hraCalculator, incomeTaxCalculator,
-  salaryCalculator, tdsCalculator,
-} from './tax';
-import {
-  birthdayCalculator, bmiCalculator, bmrCalculator, calorieCalculator, dateDifferenceCalculator,
-  percentageCalculator,
-} from './utilities';
 
 /**
  * To add a calculator: build it in src/calculators/<name>/, export a CalculatorDefinition
  * from its index.ts, and add it to this array. Nothing else changes.
- * Sections on the home screen appear in the order their first calculator is listed here.
  */
 export const calculators: CalculatorDefinition[] = [
   emiCalculator,
@@ -29,7 +18,6 @@ export const calculators: CalculatorDefinition[] = [
   carLoanCalculator,
   bikeLoanCalculator,
   goldLoanCalculator,
-  rentVsBuyCalculator,
   sipCalculator,
   stepUpSipCalculator,
   sipGoalCalculator,
@@ -41,21 +29,7 @@ export const calculators: CalculatorDefinition[] = [
   npsCalculator,
   cagrCalculator,
   retirementCalculator,
-  incomeTaxCalculator,
-  salaryCalculator,
-  hraCalculator,
-  tdsCalculator,
-  gratuityCalculator,
-  capitalGainsCalculator,
-  gstCalculator,
-  bmiCalculator,
-  bmrCalculator,
-  calorieCalculator,
-  currencyConverter,
-  percentageCalculator,
   ageCalculator,
-  birthdayCalculator,
-  dateDifferenceCalculator,
 ];
 
 export const getCalculator = (id?: string) => calculators.find((c) => c.id === id);
